@@ -1,10 +1,10 @@
 name: White Paper
 markdown: redcarpet
 pygments: true
-url: http://vinitkumar.me/white-paper
+url: http://bgame.github.io
 paginate: 8
 description:     Jekyll theme for Programmers
-intro: White Paper is a Jekyll theme most suited to be used on tech blogs that like their content to shine.
+intro: Kevin's blog - about game programming and life.
 logo:             logo.png
 disqus_shortname:
 # url: http://gotchacode.com
@@ -13,9 +13,9 @@ disqus_shortname:
 
 # Owner/author information
 owner:
-  name:           <your-name-here>
-  avatar:         <avatar-image-link>
-  email:          <your-email-address>
+  name:           Kevin.An
+  avatar:         https://avatars1.githubusercontent.com/u/1268001?v=3&u=ca9cdfea4f51cd41641e7bb2975919fd6a0a9b5e&s=140
+  email:          anyupu@gmail.com
   # Social networking links used in footer. Update and remove as you like.
   twitter:
   github:
