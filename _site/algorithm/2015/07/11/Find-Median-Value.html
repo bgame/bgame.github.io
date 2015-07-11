@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+<title>Jekyll theme for Programmers</title>
+<meta name="description" content="Jekyll theme for Programmers">
+<meta name="keywords" content="">
+
+<meta property="og:type" content="article">
+<meta property="og:title" content="Find Median Value &#8211; ">
+<meta property="og:description" content="Jekyll theme for Programmers">
+<meta property="og:url" content="http://bgame.github.io/algorithm/2015/07/11/Find-Median-Value.html">
+<meta property="og:site_name" content="">
+
+<!-- Webmaster Tools verfication -->
+
+
+
+
+<link rel="canonical" href="http://bgame.github.io/algorithm/2015/07/11/Find-Median-Value.html">
+<link href="http://bgame.github.io/feed.xml" type="application/atom+xml" rel="alternate" title=" Feed">
+
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="stylesheet" href="http://bgame.github.io/css/base.min.css" type="text/css" />
+<link rel="stylesheet" href="http://bgame.github.io/css/github.min.css" type="text/css" />
+<link rel="stylesheet" href="http://bgame.github.io/css/octicons.css" type="text/css" />
+<link href='http://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
+
+</head>
+<body>
+  <div class="header-container">
+  <header>
+      <ul class="nav">
+        <!--Change the  URL here if working on an absolute domain-->
+        
+      </ul>
+  </header>
+  <!--
+  <script data-gratipay-username="vinitkme" data-gratipay-widget="button" src="//grtp.co/v1.js"></script>
+  -->
+</div>
+
+  <div class="container">
+    <p class="intro">
+      Kevin's blog - eating/drinking/shitting/fucking/coding.
+    </p>
+  <h2>Find Median Value</h2>
+<p class="meta">11 Jul 2015</p>
+
+<div class="post">
+<ul>
+<li>Coding Interview Question 02<br>
+Write a C/C++ program that calls rand() 1,000,000 times and finds the median value</li>
+</ul>
+
+<h2>Analysis</h2>
+
+<p>First we need define &#39;Median&#39; clearly:
+<a href="https://en.wikipedia.org/wiki/Median">Definition on WikiPedia</a></p>
+
+<p>...
+If n is odd then Median (M) = value of ((n + 1)/2)th item term.</p>
+
+<p>If n is even then Median (M) = value of [((n)/2)th item term + ((n)/2 + 1)th item term ]/2
+...</p>
+
+<h2>Source Code</h2>
+<div class="highlight"><pre><code class="language-c" data-lang="c"><span class="cm">/*</span>
+<span class="cm">**  @file $RCSfile: q8.c,v $</span>
+<span class="cm">**  finding median value of 1M random integers</span>
+<span class="cm">**  @author $Author: Kevin $</span>
+<span class="cm">**  @date $Date: 2015/07/01 08:02:41 $</span>
+<span class="cm">**  @version $Revision: 0.01 $</span>
+<span class="cm">**  @note Editor: Vim 6, Gcc 4.4.6, tab=4</span>
+<span class="cm">**  @note Platform: CentOS release 6.3 (Final)</span>
+<span class="cm">*/</span>
+<span class="cp">#include &lt;stdio.h&gt;</span>
+<span class="cp">#include &lt;stdlib.h&gt;</span>
+<span class="cp">#include &lt;sys/time.h&gt;</span>
+<span class="cp">#include &lt;assert.h&gt;</span>
+
+<span class="cp">#define NUMS 1000000</span>
+
+<span class="k">static</span> <span class="kt">int</span>
+<span class="nf">average</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">,</span> <span class="kt">int</span> <span class="n">b</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">a</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">b</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">a</span> <span class="o">&amp;</span> <span class="n">b</span> <span class="o">&amp;</span> <span class="mh">0x1</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="k">static</span> <span class="kt">int</span> 
+<span class="nf">compare</span><span class="p">(</span><span class="k">const</span> <span class="kt">void</span> <span class="o">*</span><span class="n">p1</span><span class="p">,</span> <span class="k">const</span> <span class="kt">void</span> <span class="o">*</span><span class="n">p2</span><span class="p">)</span> 
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">a</span> <span class="o">=</span> <span class="o">*</span><span class="p">(</span><span class="k">const</span> <span class="kt">int</span> <span class="o">*</span><span class="p">)</span><span class="n">p1</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">b</span> <span class="o">=</span> <span class="o">*</span><span class="p">(</span><span class="k">const</span> <span class="kt">int</span> <span class="o">*</span><span class="p">)</span><span class="n">p2</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">a</span> <span class="o">==</span> <span class="n">b</span><span class="p">)</span>
+        <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">else</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">a</span> <span class="o">&lt;</span> <span class="n">b</span><span class="p">)</span><span class="o">?</span> <span class="o">-</span><span class="mi">1</span> <span class="o">:</span> <span class="mi">1</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> 
+<span class="nf">output</span><span class="p">(</span><span class="kt">int</span> <span class="o">*</span><span class="n">list</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">len</span><span class="p">)</span> <span class="cm">/* only for testing */</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">len</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;%d &quot;</span><span class="p">,</span> <span class="n">list</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+    <span class="p">}</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> 
+<span class="nf">quick_select</span><span class="p">(</span><span class="kt">int</span> <span class="o">*</span><span class="n">list</span><span class="p">,</span> <span class="kt">int</span> <span class="n">len</span><span class="p">,</span> <span class="kt">int</span> <span class="n">n</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="cp">#define SWAP(a, b) { int tmp = list[a]; list[a] = list[b]; list[b] = tmp; }</span>
+
+    <span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="n">pivot</span><span class="p">;</span>
+    <span class="cm">/* classical partition algorithm */</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">pivot</span> <span class="o">=</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">len</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">list</span><span class="p">[</span><span class="n">len</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> 
+            <span class="k">continue</span><span class="p">;</span>
+        <span class="n">SWAP</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">pivot</span><span class="p">);</span>
+        <span class="n">pivot</span><span class="o">++</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="n">SWAP</span><span class="p">(</span><span class="n">len</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">pivot</span><span class="p">);</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">n</span> <span class="o">==</span> <span class="n">pivot</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">list</span><span class="p">[</span><span class="n">pivot</span><span class="p">];</span>
+    <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">pivot</span> <span class="o">&gt;</span> <span class="n">n</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">quick_select</span><span class="p">(</span><span class="n">list</span><span class="p">,</span> <span class="n">pivot</span><span class="p">,</span> <span class="n">n</span><span class="p">);</span>
+    <span class="k">else</span>
+        <span class="k">return</span> <span class="n">quick_select</span><span class="p">(</span><span class="n">list</span> <span class="o">+</span> <span class="n">pivot</span><span class="p">,</span> <span class="n">len</span> <span class="o">-</span> <span class="n">pivot</span><span class="p">,</span> <span class="n">n</span> <span class="o">-</span> <span class="n">pivot</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">void</span>
+<span class="nf">unittest</span> <span class="p">()</span> 
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">s</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">6</span><span class="p">,</span><span class="mi">9</span><span class="p">,</span><span class="mi">19</span><span class="p">,</span><span class="mi">13</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">11</span><span class="p">,</span><span class="mi">15</span><span class="p">,</span><span class="mi">12</span><span class="p">,</span><span class="mi">12</span><span class="p">,</span><span class="mi">14</span><span class="p">,</span><span class="mi">19</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">15</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">13</span><span class="p">,</span><span class="mi">18</span><span class="p">};</span>
+    <span class="kt">int</span> <span class="n">t</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">6</span><span class="p">,</span><span class="mi">9</span><span class="p">,</span><span class="mi">19</span><span class="p">,</span><span class="mi">13</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">11</span><span class="p">,</span><span class="mi">15</span><span class="p">,</span><span class="mi">12</span><span class="p">,</span><span class="mi">12</span><span class="p">,</span><span class="mi">14</span><span class="p">,</span><span class="mi">19</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">15</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">13</span><span class="p">,</span><span class="mi">18</span><span class="p">};</span>
+    <span class="kt">int</span> <span class="n">t2</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">6</span><span class="p">,</span><span class="mi">9</span><span class="p">,</span><span class="mi">19</span><span class="p">,</span><span class="mi">13</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">11</span><span class="p">,</span><span class="mi">15</span><span class="p">,</span><span class="mi">12</span><span class="p">,</span><span class="mi">12</span><span class="p">,</span><span class="mi">14</span><span class="p">,</span><span class="mi">19</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">15</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">13</span><span class="p">,</span><span class="mi">18</span><span class="p">};</span>
+    <span class="kt">int</span> <span class="n">len</span> <span class="o">=</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">/</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="p">);</span>
+    <span class="n">qsort</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">len</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="p">),</span> <span class="n">compare</span><span class="p">);</span>
+    <span class="c1">// output(s, len);</span>
+
+    <span class="kt">int</span> <span class="n">median2</span> <span class="o">=</span> <span class="n">quick_select</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">len</span><span class="p">,</span> <span class="n">len</span><span class="o">/</span><span class="mi">2</span><span class="p">);</span>
+    <span class="kt">int</span> <span class="n">median1</span> <span class="o">=</span> <span class="n">quick_select</span><span class="p">(</span><span class="n">t2</span><span class="p">,</span> <span class="n">len</span><span class="p">,</span> <span class="n">len</span><span class="o">/</span><span class="mi">2</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+    <span class="kt">int</span> <span class="n">median</span> <span class="o">=</span> <span class="n">average</span><span class="p">(</span><span class="n">median1</span><span class="p">,</span> <span class="n">median2</span><span class="p">);</span>
+
+    <span class="c1">// printf(&quot;len:%d\n %d=(%d+%d)/2\n&quot;, len, average(s[len/2], s[len/2-1]), s[len/2], s[len/2-1]);</span>
+
+    <span class="n">assert</span><span class="p">(</span><span class="n">average</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">len</span><span class="o">/</span><span class="mi">2</span><span class="p">],</span> <span class="n">s</span><span class="p">[</span><span class="n">len</span><span class="o">/</span><span class="mi">2</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="o">==</span> <span class="n">median</span><span class="p">);</span>
+
+    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;&lt;unittesting passed!&gt;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> 
+<span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">**</span> <span class="n">argv</span><span class="p">)</span> 
+<span class="p">{</span>
+    <span class="cp">#define SWAP(a, b) { int tmp = list[a]; list[a] = list[b]; list[b] = tmp; }</span>
+    <span class="cp">#define TIME_ELAPSE(start, end) 1000000 * ( end.tv_sec - start.tv_sec ) + end.tv_usec - start.tv_usec</span>
+    <span class="n">unittest</span><span class="p">();</span>
+
+    <span class="n">srand</span><span class="p">(</span><span class="n">time</span><span class="p">(</span><span class="nb">NULL</span><span class="p">));</span>
+    <span class="k">struct</span> <span class="n">timeval</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">;</span>
+
+    <span class="cm">/* initializing */</span>
+    <span class="kt">int</span> <span class="n">s</span><span class="p">[</span><span class="n">NUMS</span><span class="p">];</span>
+    <span class="kt">int</span> <span class="o">*</span> <span class="n">t</span>  <span class="o">=</span> <span class="p">(</span><span class="kt">int</span> <span class="o">*</span><span class="p">)</span><span class="n">calloc</span><span class="p">(</span><span class="n">NUMS</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="p">));</span>
+    <span class="kt">int</span> <span class="o">*</span> <span class="n">t2</span> <span class="o">=</span> <span class="p">(</span><span class="kt">int</span> <span class="o">*</span><span class="p">)</span><span class="n">calloc</span><span class="p">(</span><span class="n">NUMS</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="p">));</span>
+    <span class="n">assert</span><span class="p">(</span><span class="n">t</span><span class="o">!=</span><span class="nb">NULL</span> <span class="o">&amp;&amp;</span> <span class="n">t2</span><span class="o">!=</span><span class="nb">NULL</span><span class="p">);</span>
+
+    <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">NUMS</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">rand</span><span class="p">();</span>
+        <span class="n">t</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">];</span> <span class="cm">/* memcpy is ok too */</span>
+        <span class="n">t2</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+    <span class="p">}</span>
+
+    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;TOTAL NUMBERS: %d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">NUMS</span><span class="p">);</span>
+
+    <span class="cm">/* quick sort : easiest way to write and the result can be as benchmark */</span>
+    <span class="n">gettimeofday</span><span class="p">(</span><span class="o">&amp;</span><span class="n">start</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
+    <span class="n">qsort</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">NUMS</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="p">),</span> <span class="n">compare</span><span class="p">);</span> <span class="cm">/* use glibc&#39;s qsort directly */</span>
+    <span class="kt">int</span> <span class="n">median_base</span> <span class="o">=</span> <span class="n">average</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">NUMS</span><span class="o">/</span><span class="mi">2</span><span class="p">],</span> <span class="n">s</span><span class="p">[</span><span class="n">NUMS</span><span class="o">/</span><span class="mi">2</span><span class="o">-</span><span class="mi">1</span><span class="p">]);</span>
+    <span class="n">gettimeofday</span><span class="p">(</span><span class="o">&amp;</span><span class="n">end</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
+
+    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&lt;quick   sort&gt; MEDIAN: %d=(%d+%d)/2, TIME: %ld us</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">median_base</span><span class="p">,</span> <span class="n">s</span><span class="p">[</span><span class="n">NUMS</span><span class="o">/</span><span class="mi">2</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">s</span><span class="p">[</span><span class="n">NUMS</span><span class="o">/</span><span class="mi">2</span><span class="p">],</span> <span class="n">TIME_ELAPSE</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">));</span>
+
+    <span class="cm">/* quick_select: optimizing based on quick sort algorithm */</span>
+    <span class="n">gettimeofday</span><span class="p">(</span><span class="o">&amp;</span><span class="n">start</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
+    <span class="kt">int</span> <span class="n">median2</span> <span class="o">=</span> <span class="n">quick_select</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">NUMS</span><span class="p">,</span> <span class="n">NUMS</span><span class="o">/</span><span class="mi">2</span><span class="p">);</span>
+    <span class="kt">int</span> <span class="n">median1</span> <span class="o">=</span> <span class="n">quick_select</span><span class="p">(</span><span class="n">t2</span><span class="p">,</span> <span class="n">NUMS</span><span class="p">,</span> <span class="n">NUMS</span><span class="o">/</span><span class="mi">2</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span> <span class="cm">/* 1000000 is even number, so we need 2 median value */</span>
+    <span class="kt">int</span> <span class="n">median</span> <span class="o">=</span> <span class="n">average</span><span class="p">(</span><span class="n">median1</span><span class="p">,</span> <span class="n">median2</span><span class="p">);</span>
+    <span class="n">gettimeofday</span><span class="p">(</span><span class="o">&amp;</span><span class="n">end</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
+
+    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&lt;quick select&gt; MEDIAN: %d=(%d+%d)/2, TIME: %ld us</span><span class="se">\n\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">median</span><span class="p">,</span> <span class="n">median1</span><span class="p">,</span> <span class="n">median2</span><span class="p">,</span> <span class="n">TIME_ELAPSE</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">));</span>
+    <span class="n">free</span><span class="p">(</span><span class="n">t</span><span class="p">);</span>
+    <span class="n">free</span><span class="p">(</span><span class="n">t2</span><span class="p">);</span>
+
+    <span class="n">exit</span><span class="p">(</span><span class="n">EXIT_SUCCESS</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+</div>
+
+<!--
+<div class="keep-in-touch">
+  <p>
+    
+  </p>
+</div>
+<a href="https://twitter.com/share" class="twitter-share-button" data-via="" data-size="large" data-hashtags="gotchacode">Tweet</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+-->
+
+
+
+  
+
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', '']);
+  _gaq.push(['_trackPageview']);
+  (function() {
+  var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+  ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+  </div><!-- /.main -->
+</body>
+</html>
