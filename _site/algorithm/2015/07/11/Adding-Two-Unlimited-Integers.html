@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+<title>Jekyll theme for Programmers</title>
+<meta name="description" content="Jekyll theme for Programmers">
+<meta name="keywords" content="">
+
+<meta property="og:type" content="article">
+<meta property="og:title" content="Adding Two Unlimited Integers &#8211; ">
+<meta property="og:description" content="Jekyll theme for Programmers">
+<meta property="og:url" content="http://bgame.github.io/algorithm/2015/07/11/Adding-Two-Unlimited-Integers.html">
+<meta property="og:site_name" content="">
+
+<!-- Webmaster Tools verfication -->
+
+
+
+
+<link rel="canonical" href="http://bgame.github.io/algorithm/2015/07/11/Adding-Two-Unlimited-Integers.html">
+<link href="http://bgame.github.io/feed.xml" type="application/atom+xml" rel="alternate" title=" Feed">
+
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="stylesheet" href="http://bgame.github.io/css/base.min.css" type="text/css" />
+<link rel="stylesheet" href="http://bgame.github.io/css/github.min.css" type="text/css" />
+<link rel="stylesheet" href="http://bgame.github.io/css/octicons.css" type="text/css" />
+<link href='http://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
+
+</head>
+<body>
+  <div class="header-container">
+  <header>
+      <ul class="nav">
+        <!--Change the  URL here if working on an absolute domain-->
+        <li><a href="/white-paper"><span class="mega-octicon octicon-terminal" style="margin-right: 6px;"></span>White Paper</a></li>
+        <li><a href="/white-paper/about"><span class="mega-octicon octicon-person" style="margin-right: 6px;"></span>About</a></li>
+      </ul>
+  </header>
+  <!--
+  <script data-gratipay-username="vinitkme" data-gratipay-widget="button" src="//grtp.co/v1.js"></script>
+  -->
+</div>
+
+  <div class="container">
+    <p class="intro">
+      Kevin's blog - about game programming and life.
+    </p>
+  <h2>Adding Two Unlimited Integers</h2>
+<p class="meta">11 Jul 2015</p>
+
+<div class="post">
+<ul>
+<li><p>Coding Interview Question 01<br>
+Implement the following function in C/C++. Arguments X and Y are pointers to null-terminated strings containing non-negative base-10 whole numbers of unlimited size/length.  Allocate and return a string containing the base-10 representation of the sum of X and Y. (Leading zeros in the output are fine.) </p></li>
+<li><p>function prototype: char *AddAsciiIntegers( const char *x, const char *y );</p></li>
+</ul>
+
+<h2>Analysis</h2>
+
+<p>First how would you use this function? maybe like this:</p>
+<div class="highlight"><pre><code class="language-c" data-lang="c">    <span class="k">const</span> <span class="kt">char</span> <span class="n">x</span><span class="p">[]</span> <span class="o">=</span>   <span class="s">&quot;2342342341119994567890234234234111999456789023423423411199945678902342342343&quot;</span><span class="p">;</span>
+    <span class="k">const</span> <span class="kt">char</span> <span class="n">y</span><span class="p">[]</span> <span class="o">=</span> <span class="s">&quot;890989092389238900890923898909238989092389890923898909238900089092389120311458&quot;</span><span class="p">;</span>
+    <span class="kt">char</span> <span class="o">*</span> <span class="n">result</span> <span class="o">=</span> <span class="n">AddAsciiIntegers</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">);</span>
+</code></pre></div>
+<p>Someone will revert the string so it&#39;ll be more nature, but I won&#39;t.</p>
+
+<p>Before coding I did a lot search on Google to find some codes about this, but nothing perfect found, so I decide to code it myself.</p>
+
+<h2>Optimize</h2>
+
+<p>If X/Y is represented in int[], then we can add much more numbers at once.</p>
+
+<h2>Source Code:</h2>
+<div class="highlight"><pre><code class="language-c" data-lang="c"><span class="cm">/*</span>
+<span class="cm">**  @file $RCSfile: q2.c,v $</span>
+<span class="cm">**  big integer adding</span>
+<span class="cm">**  @author $Author: Kevin $</span>
+<span class="cm">**  @date $Date: 2015/07/01 08:02:41 $</span>
+<span class="cm">**  @version $Revision: 0.01 $</span>
+<span class="cm">**  @note Editor: Vim 6, Gcc 4.4.6, tab=4</span>
+<span class="cm">**  @note Platform: CentOS release 6.3 (Final)</span>
+<span class="cm">*/</span>
+<span class="cp">#include &lt;stdio.h&gt;</span>
+<span class="cp">#include &lt;stdlib.h&gt;</span>
+<span class="cp">#include &lt;assert.h&gt; </span>
+<span class="cp">#include &lt;sys/time.h&gt;</span>
+<span class="cp">#include &lt;string.h&gt; </span>
+
+<span class="cm">/* copy from glibc */</span>
+<span class="cp">#define MAX(a,b) \</span>
+<span class="cp">   ({ __typeof__ (a) _a = (a); \</span>
+<span class="cp">       __typeof__ (b) _b = (b); \</span>
+<span class="cp">     _a &gt; _b ? _a : _b; })</span>
+
+<span class="kt">char</span> <span class="o">*</span>
+<span class="nf">AddAsciiIntegers</span><span class="p">(</span> <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">x</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">y</span> <span class="p">)</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">strlen</span><span class="p">(</span><span class="n">x</span><span class="p">);</span>
+    <span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="n">strlen</span><span class="p">(</span><span class="n">y</span><span class="p">);</span>
+    <span class="kt">size_t</span> <span class="n">len</span> <span class="o">=</span> <span class="n">MAX</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span> <span class="o">+</span> <span class="mi">2</span><span class="p">;</span>
+
+    <span class="kt">char</span> <span class="o">*</span> <span class="n">str_result</span> <span class="o">=</span> <span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="p">)</span><span class="n">malloc</span><span class="p">(</span><span class="n">len</span><span class="p">);</span>
+    <span class="n">assert</span><span class="p">(</span><span class="n">str_result</span><span class="p">);</span>
+
+    <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">len</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">carry</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">n</span><span class="o">--</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">i</span><span class="o">--</span><span class="p">;</span>
+        <span class="n">j</span><span class="o">--</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">j</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kt">int</span> <span class="n">sum</span> <span class="o">=</span> <span class="n">carry</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span>
+                <span class="n">sum</span> <span class="o">+=</span> <span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">-</span><span class="sc">&#39;0&#39;</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">j</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span>
+                <span class="n">sum</span> <span class="o">+=</span> <span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">-</span><span class="sc">&#39;0&#39;</span><span class="p">);</span>
+
+            <span class="n">str_result</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="n">sum</span> <span class="o">%</span> <span class="mi">10</span> <span class="o">+</span> <span class="sc">&#39;0&#39;</span><span class="p">;</span>
+
+            <span class="n">carry</span> <span class="o">=</span> <span class="n">sum</span> <span class="o">/</span> <span class="mi">10</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="p">{</span>
+            <span class="n">str_result</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="n">carry</span> <span class="o">+</span> <span class="sc">&#39;0&#39;</span><span class="p">;</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="n">str_result</span><span class="p">[</span><span class="n">len</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="sc">&#39;\0&#39;</span><span class="p">;</span>
+
+    <span class="k">return</span> <span class="n">str_result</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> 
+<span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">**</span> <span class="n">argv</span><span class="p">)</span> 
+<span class="p">{</span>
+    <span class="cp">#define TIME_ELAPSE(start, end) 1000000 * ( end.tv_sec - start.tv_sec ) + end.tv_usec - start.tv_usec</span>
+    <span class="k">const</span> <span class="kt">char</span> <span class="n">x</span><span class="p">[]</span> <span class="o">=</span>   <span class="s">&quot;2342342341119994567890234234234111999456789023423423411199945678902342342343&quot;</span><span class="p">;</span>
+    <span class="k">const</span> <span class="kt">char</span> <span class="n">y</span><span class="p">[]</span> <span class="o">=</span> <span class="s">&quot;890989092389238900890923898909238989092389890923898909238900089092389120311458&quot;</span><span class="p">;</span>
+
+    <span class="k">struct</span> <span class="n">timeval</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">;</span>
+
+    <span class="n">gettimeofday</span><span class="p">(</span> <span class="o">&amp;</span><span class="n">start</span><span class="p">,</span> <span class="nb">NULL</span> <span class="p">);</span>
+    <span class="kt">char</span> <span class="o">*</span> <span class="n">result</span> <span class="o">=</span> <span class="n">AddAsciiIntegers</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">);</span>
+    <span class="n">gettimeofday</span><span class="p">(</span> <span class="o">&amp;</span><span class="n">end</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
+
+    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;result:%s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">result</span><span class="p">);</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;</span><span class="se">\n</span><span class="s">len: %lu, time cost: %ld us</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">strlen</span><span class="p">(</span><span class="n">result</span><span class="p">),</span> <span class="n">TIME_ELAPSE</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">));</span>
+
+    <span class="n">free</span><span class="p">(</span><span class="n">result</span><span class="p">);</span>
+
+    <span class="n">exit</span><span class="p">(</span><span class="n">EXIT_SUCCESS</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+</div>
+
+<div class="keep-in-touch">
+  <p>
+    
+  </p>
+</div>
+<a href="https://twitter.com/share" class="twitter-share-button" data-via="" data-size="large" data-hashtags="gotchacode">Tweet</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
+
+
+  
+
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', '']);
+  _gaq.push(['_trackPageview']);
+  (function() {
+  var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+  ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+  </div><!-- /.main -->
+</body>
+</html>

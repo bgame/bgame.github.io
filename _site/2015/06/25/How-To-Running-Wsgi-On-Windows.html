@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+<title>Jekyll theme for Programmers</title>
+<meta name="description" content="Jekyll theme for Programmers">
+<meta name="keywords" content="">
+
+<meta property="og:type" content="article">
+<meta property="og:title" content="Running mod_wsgi on Windows &#8211; ">
+<meta property="og:description" content="Jekyll theme for Programmers">
+<meta property="og:url" content="http://bgame.github.io/2015/06/25/How-To-Running-Wsgi-On-Windows.html">
+<meta property="og:site_name" content="">
+
+<!-- Webmaster Tools verfication -->
+
+
+
+
+<link rel="canonical" href="http://bgame.github.io/2015/06/25/How-To-Running-Wsgi-On-Windows.html">
+<link href="http://bgame.github.io/feed.xml" type="application/atom+xml" rel="alternate" title=" Feed">
+
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="stylesheet" href="http://bgame.github.io/css/base.min.css" type="text/css" />
+<link rel="stylesheet" href="http://bgame.github.io/css/github.min.css" type="text/css" />
+<link rel="stylesheet" href="http://bgame.github.io/css/octicons.css" type="text/css" />
+<link href='http://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
+
+</head>
+<body>
+  <div class="header-container">
+  <header>
+      <ul class="nav">
+        <!--Change the  URL here if working on an absolute domain-->
+        <li><a href="/white-paper"><span class="mega-octicon octicon-terminal" style="margin-right: 6px;"></span>White Paper</a></li>
+        <li><a href="/white-paper/about"><span class="mega-octicon octicon-person" style="margin-right: 6px;"></span>About</a></li>
+      </ul>
+  </header>
+  <!--
+  <script data-gratipay-username="vinitkme" data-gratipay-widget="button" src="//grtp.co/v1.js"></script>
+  -->
+</div>
+
+  <div class="container">
+    <p class="intro">
+      Kevin's blog - about game programming and life.
+    </p>
+  <h2>Running mod_wsgi on Windows</h2>
+<p class="meta">25 Jun 2015</p>
+
+<div class="post">
+<h2>Overview</h2>
+
+<p>Running Apache/mod_wsgi on Windows can be a bit tricky.</p>
+
+<p>There are four requirements that you need to satsify.</p>
+
+<ol>
+<li><p>You need to ensure that you are using either 32 bit (Win32) versions of
+everything or 64 bit (Win64) versions of everything. You cannot mix 32 bit
+and 64 bit binaries.</p></li>
+<li><p>That the Python version you are using was installed for all users
+and not just the user that installed Python.</p></li>
+<li><p>That you are using a precompiled Apache binary built with the same
+version of the Microsoft C/C++ compiler as the version of Python you are
+using.</p></li>
+<li><p>That you are using a mod_wsgi binary built with the same version of
+the Microsoft C/C++ compiler as the version of Python you are using.</p></li>
+</ol>
+
+<p>The Microsoft C/C++ compiler versions which were used for various Python
+versions are:</p>
+
+<ul>
+<li>Python 2.6 - VC9</li>
+<li>Python 2.7 - VC9</li>
+<li>Python 3.3 - VC10</li>
+<li>Python 3.4 - VC10</li>
+</ul>
+
+<p>This means that if using Python 2.6 or 2.7, you should use a version of
+Apache compiled with the Microsoft VC9 C/C++ compiler. If instead using
+Python 3.3 or 3.4, you should use a version of Apache compiled with the
+Microsoft VC10 C/C++ compiler.</p>
+
+<p>If you ignore these requirements and use a version of Apache compiled with
+the Microsoft VC11 C/C++ compiler, then nothing can be guaranteed to work
+and Apache may fail to startup or crash when handling requests.</p>
+
+<p>You may also have problems with using Python 2.6 or Python 2.7 binaries,
+which were compiled with the Microsoft VC9 C/C++ compiler, with a version
+of Apache 2.4 compiled with the Microsoft VC10 C/C++ compiler.</p>
+
+<h2>Using the pre-compiled binaries</h2>
+
+<p>Occassionally precompiled binaries will be made available for mod<em>wsgi.
+These may not be updated on every release because more often than not code
+changes are being made which relate only to mod</em>wsgi daemon mode, or
+<code>mod_wsgi-express</code>, neither of which are available for Windows.</p>
+
+<p>When pre-compiled mod<em>wsgi binaries are made available they will be
+downloadable from the github release page for the mod</em>wsgi project at:</p>
+
+<ul>
+<li>https://github.com/GrahamDumpleton/mod_wsgi/releases</li>
+</ul>
+
+<p>Look back at older releases if the most current version doesn&#39;t have them
+associated with it.</p>
+
+<p>These mod_wsgi binaries will have been compiled with Python binaries
+available from the Python Software Foundation (PSF) site at:</p>
+
+<ul>
+<li>https://www.python.org/downloads/</li>
+</ul>
+
+<p>The mod_wsgi binaries would generally not be usable with other binary
+Python distributions unless they specify that they are entirely ABI
+compatible with the binary Python distributions from the PSF.</p>
+
+<p>For Apache, mod_wsgi is compiled against Apache binaries available from the
+Apache Lounge web site at:</p>
+
+<ul>
+<li>http://www.apachelounge.com</li>
+</ul>
+
+<p>The mod_wsgi binaries would generally only be usable with Apache Lounge
+binaries and should not be used with any other Apache binary distribution.</p>
+
+<p>The actual mod_wsgi binaries that are made available are:</p>
+
+<ul>
+<li>Apache22-win32-VC9/modules/mod_wsgi-py26-VC9.so</li>
+<li><p>Apache22-win32-VC9/modules/mod_wsgi-py27-VC9.so</p></li>
+<li><p>Apache24-win32-VC9/modules/mod_wsgi-py26-VC9.so</p></li>
+<li><p>Apache24-win32-VC9/modules/mod_wsgi-py27-VC9.so</p></li>
+<li><p>Apache24-win32-VC10/modules/mod_wsgi-py33-VC10.so</p></li>
+<li><p>Apache24-win32-VC10/modules/mod_wsgi-py34-VC10.so</p></li>
+<li><p>Apache24-win64-VC10/modules/mod_wsgi-py33-VC10.so</p></li>
+<li><p>Apache24-win64-VC10/modules/mod_wsgi-py34-VC10.so</p></li>
+</ul>
+
+<p>Those labelled with <code>Apache22-win32-VC9</code> should be used with the Apache
+2.2 Win32 VC9 version of Apache available from:</p>
+
+<ul>
+<li>http://www.apachelounge.com/download/additional/</li>
+</ul>
+
+<p>Those labelled with <code>Apache24-win32-VC10</code> should be used with the Apache
+2.4 Win32 VC10 version of Apache available from:</p>
+
+<ul>
+<li>http://www.apachelounge.com/download/win32/</li>
+</ul>
+
+<p>Those labelled with <code>Apache24-win64-VC10</code> should be used with the Apache
+2.4 Win64 VC10 version of Apache available from:</p>
+
+<ul>
+<li>http://www.apachelounge.com/download/win64/</li>
+</ul>
+
+<p>Note that Apache Lounge does not provide any Win64 VC9 binaries for Apache
+2.4. This means that technically there is no combination available for
+correctly running mod_wsgi with a Win64 VC9 version of Python 2.6 or 2.7.</p>
+
+<p>History shows that users simply don&#39;t want to accept this and don&#39;t want to
+understand that mixing VC9 and VC10 binaries are not guaranteed to work.</p>
+
+<p>The specific issue is that if certain data structures are passed between
+VC9 and VC10 code, then the application could crash as the data structure
+layouts for each variant may not be compatible.</p>
+
+<p>As it happens the interface between Apache and Python via mod_wsgi is very
+minimal and so it is possible that there are no instances of incompatible
+data structures being passed across the ABI boundary, but that cannot be
+guaranteed.</p>
+
+<p>So for those who will not accept &#39;No&#39; as a answer, the following binaries
+are also provided. Because they are mixing binaries using different ABIs,
+they may or may not work for your particular cirumstances. You are still
+welcome to try, but there is no support for using this combination.</p>
+
+<ul>
+<li>Apache24-win64-VC10/modules/mod_wsgi-py26-VC9.so</li>
+<li>Apache24-win64-VC10/modules/mod_wsgi-py27-VC9.so</li>
+</ul>
+
+<p>Note that no binaries for Python 3.2 are provided due to it being an older
+version in the 3.X line, but also because a Win64 VC9 version of it does
+crash a Win64 VC10 version of Apache 2.4 on startup. This shows how
+arbitrary compatibility is when you start mixing binaries built against
+different ABIs. You have been warned.</p>
+
+<h2>Compiling from source code</h2>
+
+<p>If you need to compile from source code because you are using a different
+Apache distribution or a different Python distribution, you will need to
+have installed the appropriate Microsoft C/C++ compiler. You cannot simply
+use any Microsoft C/C++ compiler you might have.</p>
+
+<p>The details on where the Microsoft C/C++ compilers are available from are
+given below.</p>
+
+<p>Python 2.6, 2.7 (32 Bit Only)
++++++++++++++++++++++++++++++</p>
+
+<p>Use the latest Python 2.6 or 2.7 binary available from the PSF:</p>
+
+<ul>
+<li>https://www.python.org/downloads/release/python-279/</li>
+</ul>
+
+<p>You must use the 32 bit version which is labelled as:</p>
+
+<ul>
+<li>Windows x86 MSI installer</li>
+</ul>
+
+<p>Python 2.6 and 2.7 are compiled with the Microsoft C/C++ compiler from
+Visual Studio 2008. This is referred to as being compiled for VC9.</p>
+
+<p>You must therefore use a version of Apache compiled for VC9.</p>
+
+<p>For the Microsoft C/C++ compiler, you need to download it from Microsoft.</p>
+
+<ul>
+<li>http://www.microsoft.com/en-us/download/details.aspx?id=44266</li>
+</ul>
+
+<p>This can compile both 32 bit and 64 bit binaries.</p>
+
+<p>Python 2.6, 2.7 (64 Bit Only)
++++++++++++++++++++++++++++++</p>
+
+<p>Use the latest Python 2.6 or 2.7 binary available from the PSF:</p>
+
+<ul>
+<li>https://www.python.org/downloads/release/python-279/</li>
+</ul>
+
+<p>You must use the 64 bit version which is labelled as:</p>
+
+<ul>
+<li>Windows x86-64 MSI installer</li>
+</ul>
+
+<p>Python 2.6 and 2.7 are compiled with the Microsoft C/C++ compiler from
+Visual Studio 2008. This is referred to as being compiled for VC9.</p>
+
+<p>You must therefore use a version of Apache compiled for VC9.</p>
+
+<p>For the Microsoft C/C++ compiler, you need to download it from Microsoft.</p>
+
+<ul>
+<li>http://www.microsoft.com/en-us/download/details.aspx?id=44266</li>
+</ul>
+
+<p>This can compile both 32 bit and 64 bit binaries.</p>
+
+<p>Python 3.3, 3.4 (32 Bit)
+++++++++++++++++++++++++</p>
+
+<p>Use the latest Python 3.3 or 3.4 binary available from the PSF:</p>
+
+<ul>
+<li>https://www.python.org/downloads/release/python-279/</li>
+</ul>
+
+<p>You must use the 32 bit version which is labelled as:</p>
+
+<ul>
+<li>Windows x86 MSI installer</li>
+</ul>
+
+<p>Python 3.3 and 3.4 are compiled with the Microsoft C/C++ compiler from
+Visual Studio 2010. This is referred to as being compiled for VC10.</p>
+
+<p>You must therefore use a version of Apache compiled for VC10.</p>
+
+<p>For the Microsoft C/C++ compiler, you need to download it from Microsoft.</p>
+
+<ul>
+<li>http://www.visualstudio.com/downloads/download-visual-studio-vs#DownloadFamilies_4</li>
+</ul>
+
+<p>Use the one labelled as:</p>
+
+<ul>
+<li>Visual C++ 2010 Express</li>
+</ul>
+
+<p>This version of the Microsoft C/C++ compiler can only compile 32 bit binaries.</p>
+
+<p>Python 3.3, 3.4 (64 Bit)
+++++++++++++++++++++++++</p>
+
+<p>Use the latest Python 3.3 or 3.4 binary available from the PSF:</p>
+
+<ul>
+<li>https://www.python.org/downloads/release/python-279/</li>
+</ul>
+
+<p>You must use the 64 bit version which is labelled as:</p>
+
+<ul>
+<li>Windows x86-x86 MSI installer</li>
+</ul>
+
+<p>Python 3.3 and 3.4 are compiled with the Microsoft C/C++ compiler from
+Visual Studio 2010. This is referred to as being compiled for VC10.</p>
+
+<p>You must therefore use a version of Apache compiled for VC10.</p>
+
+<p>For the Microsoft C/C++ compiler, you need to download it from Microsoft.</p>
+
+<ul>
+<li>http://www.microsoft.com/en-us/download/details.aspx?id=8279</li>
+</ul>
+
+<p>This is different to the Visual C++ 2010 Express above which could only
+compile 32 bit binaries. This version can instead compile 64 bit binaries.</p>
+
+<p>Triggering the build
++++++++++++++++++++++</p>
+
+<p>Once Python, Apache and the appropriate Microsoft C/C++ is installed, start
+up the Visual Studio 2008/2010 or Windows 7.1 SDK Command Prompt window
+corresponding to the version of the Microsoft C/C++ compiler required for
+your Python version. Make your way to this directory. You then need to do:</p>
+
+<ol>
+<li>Find the appropriate makefile in the directory for your combination
+of Apache and Python.</li>
+<li>Edit the makefile and set the path to where you installed both Apache
+and Python.</li>
+<li>Run <code>nmake -f apXYpyXY-winNN-VC?.mk clean</code>. Substitute &#39;XY&#39; in each
+case for the version of Apache and Python being used. Substitute &#39;NN&#39;
+with either &#39;32&#39; or &#39;64&#39; and substitute &#39;?&#39; with &#39;9&#39; or &#39;10&#39;.</li>
+<li>Run <code>nmake -f apXYpyXY-winNN-VC?.mk</code>. This will build mod_wsgi.</li>
+<li>Run <code>nmake -f apXYpyXY-winNN-VC?.mk install</code>. This will install the
+mod_wsgi module into the modules directory of your Apache installation.</li>
+<li>Add the <code>LoadModule</code> line to the Apache configuration which was
+displayed when the <code>install</code> target was run.</li>
+<li>Edit the Apache configuration as covered in mod<em>wsgi documentation or
+otherwise to have mod</em>wsgi host your WSGI application.</li>
+</ol>
+
+<p>Other build scripts do exist in this directory but they are to allow bulk
+compilation of all combinations in one go and wouldn&#39;t generally be of
+interest. They require all possible Apache and Python versions to be
+available as well as all required Microsoft C/C++ compiler. You should
+therefore stick to just the makefile you need.</p>
+
+</div>
+
+<div class="keep-in-touch">
+  <p>
+    
+  </p>
+</div>
+<a href="https://twitter.com/share" class="twitter-share-button" data-via="" data-size="large" data-hashtags="gotchacode">Tweet</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
+
+
+  
+
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', '']);
+  _gaq.push(['_trackPageview']);
+  (function() {
+  var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+  ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+  </div><!-- /.main -->
+</body>
+</html>

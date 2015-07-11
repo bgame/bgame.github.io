@@ -6,11 +6,11 @@ paginate: 8
 description:     Jekyll theme for Programmers
 intro: Kevin's blog - about game programming and life.
 logo:             logo.png
-disqus_shortname:
+#disqus_shortname:
 # url: http://gotchacode.com
 #Comment out url when working locally to resolve base urls correctly
 #url:
-
+img_url: /assets/images
 # Owner/author information
 owner:
   name:           Kevin.An
