@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Find Median Value"
+title: "Classical Quick Sort Algorithm"
 date: 2015-07-11
 comments: true
 categories: Algorithm
