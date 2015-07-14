@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+<title>Jekyll theme for Programmers</title>
+<meta name="description" content="Jekyll theme for Programmers">
+<meta name="keywords" content="">
+
+<meta property="og:type" content="article">
+<meta property="og:title" content="strstr in c &#8211; ">
+<meta property="og:description" content="Jekyll theme for Programmers">
+<meta property="og:url" content="http://bgame.github.io/algorithm/2015/07/14/strstr.html">
+<meta property="og:site_name" content="">
+
+<!-- Webmaster Tools verfication -->
+
+
+
+
+<link rel="canonical" href="http://bgame.github.io/algorithm/2015/07/14/strstr.html">
+<link href="http://bgame.github.io/feed.xml" type="application/atom+xml" rel="alternate" title=" Feed">
+
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="stylesheet" href="http://bgame.github.io/css/base.min.css" type="text/css" />
+<link rel="stylesheet" href="http://bgame.github.io/css/github.min.css" type="text/css" />
+<link rel="stylesheet" href="http://bgame.github.io/css/octicons.css" type="text/css" />
+<link href='http://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
+
+</head>
+<body>
+  <div class="header-container">
+  <header>
+      <ul class="nav">
+        <!--Change the  URL here if working on an absolute domain-->
+        <li>Kevin's blog : eating/drinking/shitting/fucking/coding.</li>
+      </ul>
+  </header>
+  <!--
+  <script data-gratipay-username="vinitkme" data-gratipay-widget="button" src="//grtp.co/v1.js"></script>
+  -->
+</div>
+
+  <div class="container">
+    <p class="intro">
+      
+    </p>
+  <h2>strstr in c</h2>
+<p class="meta">14 Jul 2015</p>
+
+<div class="post">
+<h2>Source Code</h2>
+<div class="highlight"><pre><code class="language-c" data-lang="c"><span class="cp">#include &lt;stdio.h&gt;</span>
+<span class="cp">#include &lt;stdlib.h&gt;</span>
+<span class="cp">#include &lt;string.h&gt;</span>
+
+<span class="cp">#define NOTFOUND -1</span>
+<span class="kt">int</span> <span class="nf">my_strstr</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span> <span class="n">s1</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span> <span class="n">s2</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span> <span class="n">p</span> <span class="o">=</span> <span class="n">s1</span><span class="p">;</span>
+    <span class="k">do</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">*</span><span class="n">p</span> <span class="o">==</span> <span class="o">*</span><span class="n">s2</span><span class="p">)</span> <span class="p">{</span> <span class="cm">/* match first char */</span>
+            <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span> <span class="n">p1</span> <span class="o">=</span> <span class="n">p</span><span class="p">;</span>
+            <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span> <span class="n">p2</span> <span class="o">=</span> <span class="n">s2</span><span class="p">;</span>
+            <span class="k">do</span> 
+            <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="o">!*</span><span class="n">p2</span><span class="p">)</span> <span class="cm">/* FOUND */</span>
+                    <span class="k">return</span> <span class="n">p</span> <span class="o">-</span> <span class="n">s1</span><span class="p">;</span>
+                <span class="k">if</span> <span class="p">(</span><span class="o">!*</span><span class="n">p1</span><span class="p">)</span>
+                    <span class="k">return</span> <span class="n">NOTFOUND</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">while</span> <span class="p">(</span><span class="o">*</span><span class="n">p1</span><span class="o">++</span> <span class="o">==</span> <span class="o">*</span><span class="n">p2</span><span class="o">++</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">while</span><span class="p">(</span><span class="o">*</span><span class="n">p</span><span class="o">++</span><span class="p">);</span>
+
+    <span class="k">return</span> <span class="n">NOTFOUND</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> 
+<span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">**</span> <span class="n">argv</span><span class="p">)</span> 
+<span class="p">{</span>
+    <span class="kt">char</span> <span class="n">s1</span><span class="p">[]</span> <span class="o">=</span> <span class="s">&quot;skldjfwioeuwetewtsdfsdf&quot;</span><span class="p">;</span>
+    <span class="kt">char</span> <span class="n">s2</span><span class="p">[]</span> <span class="o">=</span> <span class="s">&quot;sdfsdf&quot;</span><span class="p">;</span>
+
+    <span class="kt">int</span> <span class="n">pos</span> <span class="o">=</span> <span class="n">my_strstr</span><span class="p">(</span><span class="n">s1</span><span class="p">,</span> <span class="n">s2</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">pos</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;found:%d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">pos</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">else</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;not found!</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+
+    <span class="n">exit</span><span class="p">(</span><span class="n">EXIT_SUCCESS</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+</div>
+
+<!--
+<div class="keep-in-touch">
+  <p>
+    
+  </p>
+</div>
+<a href="https://twitter.com/share" class="twitter-share-button" data-via="" data-size="large" data-hashtags="gotchacode">Tweet</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+-->
+
+
+
+  
+
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', '']);
+  _gaq.push(['_trackPageview']);
+  (function() {
+  var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+  ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+  </div><!-- /.main -->
+</body>
+</html>

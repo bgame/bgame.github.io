@@ -12,7 +12,7 @@ Write a C/C++ program that calls rand() 1,000,000 times and finds the median val
 Analysis
 --------
 First we need define 'Median' clearly:
-[Definition on WikiPedia](https://en.wikipedia.org/wiki/Median)
+[Median](https://en.wikipedia.org/wiki/Median)
 
 ...
 If n is odd then Median (M) = value of ((n + 1)/2)th item term.

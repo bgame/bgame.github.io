@@ -1,17 +1,14 @@
 ---
 layout: post
 title: "Classical Quick Sort Algorithm"
-date: 2015-07-11
+date: 2015-07-12
 comments: true
 categories: Algorithm
 ---
 
-* Classical Quick Sort Algorithm<br>
-
 Analysis
 --------
-[Definition on WikiPedia](https://en.wikipedia.org/wiki/Quicksort)
-Acctually it is hard to write code on than definition, we need more practical way: Partition can be merged into sorting process.
+Acctually [Quick Sort](https://en.wikipedia.org/wiki/Quicksort) is hard to write code directly according to that definition. We need more practical way, e.g. partition can be merged into sorting process.
 
 
 Source Code

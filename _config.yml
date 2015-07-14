@@ -4,7 +4,7 @@ pygments: true
 url: http://bgame.github.io
 paginate: 8
 description:     Jekyll theme for Programmers
-intro: Kevin's blog - eating/drinking/shitting/fucking/coding.
+intro: 
 logo:             logo.png
 #disqus_shortname:
 # url: http://gotchacode.com
